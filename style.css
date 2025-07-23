@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #153677, #4e085f);
+    padding: 10px;
+}
+
+
+.todo-app {
+    width: 100%;
+    max-width: 540px;
+    background: #fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+
+.todo-app h2 {
+    color: #002765;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.todo-app h2 img {
+   width: 30px;
+   margin-left: 10px; 
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+
+input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+}
+
+button {
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #ff5945;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 40px;
+}
+
+ul li {
+    list-style: none;
+    font-size: 17px;
+    padding: 12px 8px 12px 50px;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+}
+
+
+
+ul li.checked::before {
+    background: #ff8c00;
+    border: 2px solid #ff8c00;
+}
+
+
+ul li.checked::after {
+    content: '✓';
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+ul li::before {
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background: #fff;
+    top: 12px;
+    left: 8px;
+    transition: all 0.3s ease; /* Add this line */
+}
+
+ul li.checked {
+    color: #555;
+    text-decoration: line-through;
+}
+
+ul li.checked::before {
+    background-image: url(images/unchecked.png);
+}
+
+ul li span {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    height: 40px;
+    width: 40px;
+    font-size: 22px;
+    color: #555;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+ul li span:hover {
+    background: #edeef0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ADD THESE CSS RULES TO YOUR style.css: */
+
+/* Theme toggle button */
+.theme-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 2px solid #002765;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Dark mode styles */
+.dark-mode .container {
+    background: linear-gradient(135deg, #1a1a1a, #2d1b69);
+}
+
+.dark-mode .todo-app {
+    background: #333;
+    color: #fff;
+}
+
+.dark-mode .todo-app h2 {
+    color: #fff;
+}
+
+.dark-mode .row {
+    background: #444;
+}
+
+.dark-mode input {
+    color: #fff;
+}
+
+.dark-mode input::placeholder {
+    color: #ccc;
+}
+
+.dark-mode ul li {
+    color: #fff;
+}
+
+.dark-mode ul li.checked {
+    color: #aaa;
+}
+
+.dark-mode ul li::before {
+    border-color: #666;
+    background: #444;
+}
+
+.dark-mode ul li.checked::before {
+    background: #ff8c00;
+    border-color: #ff8c00;
+}
+
+.dark-mode ul li span {
+    color: #ccc;
+}
+
+.dark-mode ul li span:hover {
+    background: #555;
+}
+
+.dark-mode .theme-btn {
+    border-color: #fff;
+    color: #fff;
+}
+
+
+
+:fullscreen {
+    overflow: hidden;
+}
+
+/* Adjust container in fullscreen */
+:fullscreen .container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Center the todo app better in fullscreen */
+:fullscreen .todo-app {
+    margin: 0;
+    max-width: 600px;
+}
