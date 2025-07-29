@@ -12,6 +12,8 @@ function addTask() {
    else{
     let li = document.createElement("li");
     li.innerHTML = inputBox.value;
+    li.setAttribute("draggable", "true");
+    addDragEvents(li);
     listContainer.appendChild(li);
     let span = document.createElement("span");
     span.innerHTML = "\u00d7";  
@@ -20,6 +22,8 @@ function addTask() {
 
    inputBox.value = "";
    saveData();
+
+   toggleClearButton();
 }
 
 listContainer.addEventListener("click", function(e){
@@ -30,6 +34,8 @@ listContainer.addEventListener("click", function(e){
    else if(e.target.tagName === "SPAN"){
       e.target.parentElement.remove();  
       saveData(); 
+
+      toggleClearButton();
    }
 }, false)
 
@@ -39,9 +45,28 @@ function saveData(){
 
 function showTask(){
    listContainer.innerHTML = localStorage.getItem("data");
+    Array.from(listContainer.children).forEach(item => {
+        if (item.tagName === "LI") {
+            item.setAttribute("draggable", "true");
+            addDragEvents(item);
+            toggleClearButton();
+        }
+    });
 }
 
 showTask()
+
+
+const clearAllBtn = document.getElementById('clear-all-btn');
+
+clearAllBtn.addEventListener('click', function() {
+    if (confirm("Are you sure you want to clear all tasks? This cannot be undone.")) {
+        listContainer.innerHTML = "";
+        saveData();
+        toggleClearButton(); // This line is new
+    }
+});
+
 
 inputBox.addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
@@ -54,7 +79,51 @@ inputBox.addEventListener("keypress", function(e) {
 
 
 
-// ADD THIS TO THE END OF YOUR script.js file:
+let draggedItem = null;
+
+function addDragEvents(item) {
+    item.addEventListener("dragstart", function () {
+        draggedItem = item;
+        setTimeout(() => item.style.display = "none", 0);
+    });
+
+    item.addEventListener("dragend", function () {
+        setTimeout(() => {
+            draggedItem.style.display = "block";
+            draggedItem = null;
+        }, 0);
+        saveData();
+    });
+
+    item.addEventListener("dragover", function (e) {
+        e.preventDefault();
+    });
+
+    item.addEventListener("dragenter", function (e) {
+        e.preventDefault();
+        this.style.borderTop = "2px dashed #aaa";
+    });
+
+    item.addEventListener("dragleave", function () {
+        this.style.borderTop = "";
+    });
+
+    item.addEventListener("drop", function () {
+        this.style.borderTop = "";
+        listContainer.insertBefore(draggedItem, this);
+    });
+}
+
+
+
+function toggleClearButton() {
+    const clearRow = document.querySelector('.clear-row');
+    if (listContainer.children.length > 0) {
+        clearRow.classList.add('show');
+    } else {
+        clearRow.classList.remove('show');
+    }
+}
 
 // Theme toggle functionality
 const themeToggle = document.getElementById('theme-toggle');
