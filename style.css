@@ -301,3 +301,51 @@ ul li span:hover {
 .clear-row.show {
     display: flex;
 }
+
+
+
+/* Add these CSS styles to your style.css file for the edit functionality */
+
+.edit-input {
+    background: transparent !important;
+    border: 2px solid #ff5945 !important;
+    border-radius: 5px !important;
+    padding: 5px 8px !important;
+    font-size: 17px !important;
+    font-family: "DM Sans", sans-serif !important;
+    width: calc(100% - 80px) !important;
+    margin-right: 10px !important;
+}
+
+.edit-input:focus {
+    outline: none !important;
+    border-color: #ff8c00 !important;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.3) !important;
+}
+
+/* Dark mode styles for edit input */
+.dark-mode .edit-input {
+    background: #444 !important;
+    color: #fff !important;
+    border-color: #ff5945 !important;
+}
+
+.dark-mode .edit-input:focus {
+    border-color: #ff8c00 !important;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.5) !important;
+}
+
+/* Prevent text selection while editing */
+ul li:has(.edit-input) {
+    user-select: text;
+}
+
+/* Style for tasks being edited */
+ul li:has(.edit-input) {
+    background-color: rgba(255, 89, 69, 0.1);
+    border-radius: 8px;
+}
+
+.dark-mode ul li:has(.edit-input) {
+    background-color: rgba(255, 89, 69, 0.2);
+}

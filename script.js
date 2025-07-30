@@ -5,39 +5,90 @@ const listContainer = document.getElementById("list-container");
 
 
 
+function makeTaskEditable(taskElement) {
+    const currentText = taskElement.firstChild.textContent;
+    
+    // Create input element
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentText;
+    input.className = 'edit-input';
+    
+    // Replace task text with input
+    taskElement.firstChild.textContent = '';
+    taskElement.insertBefore(input, taskElement.querySelector('span'));
+    
+    // Focus and select all text
+    input.focus();
+    input.select();
+    
+    // Handle saving the edit
+    function saveEdit() {
+        const newText = input.value.trim();
+        if (newText === '') {
+            alert("Task cannot be empty!");
+            input.focus();
+            return;
+        }
+        
+        // Remove input and restore text
+        input.remove();
+        taskElement.firstChild.textContent = newText;
+        saveData();
+    }
+    
+    // Save on Enter key
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            saveEdit();
+        }
+    });
+
+    input.addEventListener('blur', saveEdit);
+
+        input.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            input.remove();
+            taskElement.firstChild.textContent = currentText;
+        }
+    });
+}
+
 function addTask() {
-   if(inputBox.value === ''){
+    if(inputBox.value === ''){
         alert("You must write something!");
-   } 
-   else{
-    let li = document.createElement("li");
-    li.innerHTML = inputBox.value;
-    li.setAttribute("draggable", "true");
-    addDragEvents(li);
-    listContainer.appendChild(li);
-    let span = document.createElement("span");
-    span.innerHTML = "\u00d7";  
-    li.appendChild(span);
-   }
+    } 
+    else{
+        let li = document.createElement("li");
+        li.innerHTML = inputBox.value;
+        li.setAttribute("draggable", "true");
+        addDragEvents(li);
+        listContainer.appendChild(li);
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";  
+        li.appendChild(span);
+    }
 
-   inputBox.value = "";
-   saveData();
-
-   toggleClearButton();
+    inputBox.value = "";
+    saveData();
+    toggleClearButton();
 }
 
 listContainer.addEventListener("click", function(e){
-   if(e.target.tagName === "LI"){
-      e.target.classList.toggle("checked");
-      saveData()
-   }
-   else if(e.target.tagName === "SPAN"){
-      e.target.parentElement.remove();  
-      saveData(); 
+    if(e.target.tagName === "LI"){
+        // Check if we're not clicking on the edit input
+        if (!e.target.querySelector('.edit-input')) {
+            e.target.classList.toggle("checked");
+            saveData();
+        }
+    }
+    else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();  
+        saveData(); 
+        toggleClearButton();
+    }
+}, false);
 
-      toggleClearButton();
-   }
-}, false)
 
 function saveData(){
    localStorage.setItem("data", listContainer.innerHTML);
@@ -49,9 +100,10 @@ function showTask(){
         if (item.tagName === "LI") {
             item.setAttribute("draggable", "true");
             addDragEvents(item);
-            toggleClearButton();
+            
         }
     });
+    toggleClearButton();
 }
 
 showTask()
@@ -154,14 +206,20 @@ themeToggle.addEventListener('click', function() {
 // ADD THIS TO THE END OF YOUR script.js file:
 
 // Fullscreen functionality on double-click
-document.addEventListener('dblclick', function() {
+document.addEventListener('dblclick', function(e) {
+    // Check if double-click is on a task item
+    if (e.target.tagName === 'LI' && e.target.parentElement.id === 'list-container') {
+        e.preventDefault(); // Prevent fullscreen
+        makeTaskEditable(e.target);
+        return;
+    }
+    
+    // Original fullscreen functionality for other areas
     if (!document.fullscreenElement) {
-        // Enter fullscreen
         document.documentElement.requestFullscreen().catch(err => {
             console.log(`Error attempting to enable fullscreen: ${err.message}`);
         });
     } else {
-        // Exit fullscreen
         document.exitFullscreen().catch(err => {
             console.log(`Error attempting to exit fullscreen: ${err.message}`);
         });
